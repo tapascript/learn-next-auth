@@ -6,7 +6,8 @@ This repository contains the source code for the educational video on the [tapaS
 ## The Implementations:
 
 - [Integrate Google OAUTH](https://github.com/tapascript/learn-next-auth/tree/01-integrate-google-provider) => [Watch the Video Tutorial](https://www.youtube.com/watch?v=O8Ae6MC5bf4)
-- [Integrate GitHub OAUTH](https://github.com/tapascript/learn-next-auth/tree/01-integrate-google-provider) => [Watch the Video Tutorial](https://www.youtube.com/watch?v=O8Ae6MC5bf4)
+- [Integrate GitHub OAUTH](https://github.com/tapascript/learn-next-auth/tree/02-integrate-github-provider) => [Watch the Video Tutorial](https://www.youtube.com/watch?v=O8Ae6MC5bf4)
+- [Next-Auth Credential Provider](https://github.com/tapascript/learn-next-auth/tree/03-credential-auth) => [Watch the Video Tutorial](https://www.youtube.com/watch?v=4m7u7zGbdTI)
 
 ## 🫶 Support
 Liked my work? You can show your support with a STAR(⭐).
@@ -17,7 +18,7 @@ Liked my work? You can show your support with a STAR(⭐).
 
 ## 🙏 Please Sponsor My Work
 
-I am an independent educator who creates meaningful projects to teach programming. You can support me further by [sponsoring me on GitHub](https://github.com/sponsors/atapas).
+> I am an independent educator who creates meaningful projects to teach programming. You can support me further by [sponsoring me on GitHub](https://github.com/sponsors/atapas).
 
 
 ## How to Set up and Run Locally
