@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 const HomePage = async () => {
     const session = await auth();
 
-    if (!session?.user) redirect("/");
+    if (!session?.user) redirect("/login");
 
     return (
         <div className="flex flex-col items-center m-4">
