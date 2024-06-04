@@ -6,6 +6,7 @@ import Logout from "./Logout";
 const Navbar = async () => {
   const session = await auth();
   const loggedInUser = session?.user;
+  console.log(loggedInUser);
   const userName = loggedInUser?.name;
   const dp = loggedInUser?.image; 
 
