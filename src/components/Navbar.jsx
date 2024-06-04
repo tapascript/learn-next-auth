@@ -7,7 +7,7 @@ const Navbar = () => {
         <h1 className="text-2xl">Some Random Product App</h1>
       </Link>
       <nav>
-        <ul className="flex">
+        <ul className="flex pt-1">
           <li className="mx-2">
             <Link href="/login">Login</Link>
           </li>
