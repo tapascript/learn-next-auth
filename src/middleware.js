@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
+import { auth } from "./auth";
 
-export function middleware(request) {
+export async function middleware(request) {
+  const session = await auth();
     console.log(request.url);
     return NextResponse.redirect(new URL("/", request.url));
 }
