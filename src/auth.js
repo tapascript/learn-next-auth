@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
-
+import { authConfig } from "./auth.config";
 import { User } from "./model/user-model";
 import bcrypt from "bcryptjs";
 
@@ -13,9 +13,7 @@ export const {
     signIn,
     signOut,
 } = NextAuth({
-    session: {
-      strategy: 'jwt',
-    },
+    ...authConfig,
     providers: [
         CredentialsProvider({
             credentials: {
