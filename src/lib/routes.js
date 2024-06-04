@@ -7,3 +7,7 @@ export const PUBLIC_ROUTES = [
     '/register',
     '/products'
 ]
+
+export const PROTECTED_SUB_ROUTES = [
+    '/checkout',
+]
