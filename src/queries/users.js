@@ -7,3 +7,8 @@ export async function createUser(user) {
     throw new Error(e)
   }
 }
+
+export async function getUserByEmail(email) {
+  const user = await User.findOne({ email: email }).select("-password").lean();
+  return user;
+}
