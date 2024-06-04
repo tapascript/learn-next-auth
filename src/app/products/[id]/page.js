@@ -2,7 +2,6 @@ import { getProductById } from "@/data/products"
 import Link from "next/link";
 const ProductDetailsPage = ({params: {id}}) => {
   const product = getProductById(id);
-  console.log(product);
   return (
     <div className="flex flex-col justify-center items-center p-8">
       <p className="text-5xl">{product.image}</p>
