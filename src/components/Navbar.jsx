@@ -3,12 +3,13 @@ import Image from "next/image";
 import { auth } from "@/auth";
 import Logout from "./Logout";
 
+import { CircleUserRound } from 'lucide-react';
+
 const Navbar = async () => {
   const session = await auth();
   const loggedInUser = session?.user;
-  console.log(loggedInUser);
+  //console.log(loggedInUser);
   const userName = loggedInUser?.name;
-  const dp = loggedInUser?.image; 
 
   return (
       <header className="flex justify-between bg-slate-900 text-white p-2">
@@ -20,13 +21,13 @@ const Navbar = async () => {
                   {userName ? (
                     <li className="flex">
                       <Link href="/dashboard">
-                        <Image
-                          src={session?.user?.image}
-                          alt={session?.user?.name}
-                          width={25}
-                          height={25}
-                          className="rounded-full"
-                        />
+                        {session?.user?.image ? <Image
+                            src={session?.user?.image}
+                            alt={session?.user?.name}
+                            width={25}
+                            height={25}
+                            className="rounded-full"
+                          /> : <CircleUserRound />}
                       </Link>
                       <span className="mx-1">|</span>
                       <Logout/>

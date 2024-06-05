@@ -23,7 +23,7 @@ const LoginForm = () => {
                 console.error(response.error);
                 setError(response.error.message);
             } else {
-                router.push("/");
+                router.push("/products");
             }
         } catch (e) {
             console.error(e);

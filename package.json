@@ -9,12 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "add": "^2.0.6",
     "bcryptjs": "^2.4.3",
+    "lucide-react": "^0.383.0",
     "mongoose": "^8.4.0",
     "next": "14.2.3",
     "next-auth": "^5.0.0-beta.17",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "yarn": "^1.22.22"
   },
   "devDependencies": {
     "eslint": "^8",
