@@ -24,27 +24,37 @@ export const {
                 if (credentials === null) return null;
                 
                 try {
-                    const user = await User.findOne({
-                        email: credentials?.email
-                    }).lean();
-                    console.log(user);
-                    if (user) {
-                        const isMatch = await bcrypt.compare(
-                            credentials.password,
-                            user.password
-                        );
-
-                        if (isMatch) {
-                            return user;
-                        } else {
-                            throw new Error("Email or Password is not correct");
-                        }
-                    } else {
-                        throw new Error("User not found");
+                    const res = await fetch("http://localhost:5001/users/signIn", {
+                      method: "POST",
+                      body: JSON.stringify({
+                        email: credentials.email,
+                        password: credentials.password,
+                      }),
+                      headers: { "Content-Type": "application/json" },
+                    });
+          
+                    if (!res.ok) {
+                      // credentials are invalid
+                      return null;
                     }
-                } catch (error) {
-                    throw new Error(error);
-                }
+          
+                    const parsedResponse = await res.json();
+          
+                    // accessing the jwt returned by server
+                    const jwt = parsedResponse.accessToken;
+
+                    console.log(jwt);
+          
+          // You can make more request to get other information about the user eg. Profile details
+          
+                   // return user credentials together with jwt
+                    return {
+                      ...credentials,
+                      jwt,
+                    };
+                  } catch (e) {
+                    return null;
+                  }
             },
         }),
         GoogleProvider({
