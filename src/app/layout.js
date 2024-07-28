@@ -5,6 +5,8 @@ import Navbar from "@/components/Navbar";
 
 import { dbConnect } from "@/lib/mongo";
 
+import { SessionProvider } from 'next-auth/react';
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -17,8 +19,10 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navbar/>
-        <main className="p-2">{children}</main>
+        <SessionProvider> 
+          <Navbar/>
+          <main className="p-2">{children}</main>
+        </SessionProvider>
       </body>
     </html>
   );

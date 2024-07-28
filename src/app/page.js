@@ -8,6 +8,10 @@ export default function Landing() {
                 <Link className="text-3xl underline" href="/products">
                     All Products
                 </Link>
+
+                <Link className="text-3xl underline" href="/users">
+                    All Users
+                </Link>
             </div>
         </>
     );

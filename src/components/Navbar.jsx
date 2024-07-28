@@ -8,8 +8,8 @@ import { CircleUserRound } from 'lucide-react';
 const Navbar = async () => {
   const session = await auth();
   const loggedInUser = session?.user;
-  //console.log(loggedInUser);
-  const userName = loggedInUser?.name;
+  console.log(loggedInUser);
+  const userName = loggedInUser?.name ?? loggedInUser?.email;
 
   return (
       <header className="flex justify-between bg-slate-900 text-white p-2">

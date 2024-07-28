@@ -6,59 +6,57 @@ import { authConfig } from "./auth.config";
 import { User } from "./model/user-model";
 import bcrypt from "bcryptjs";
 
+import { jwtDecode } from "jwt-decode";
+
 /**
  * Takes a token, and returns a new token with updated
  * `accessToken` and `accessTokenExpires`. If an error occurs,
  * returns the old token and an error property
  */
 async function refreshAccessToken(token) {
-    try {
-      const url =
-        'https://oauth2.googleapis.com/token?' +
-        new URLSearchParams({
-          client_id: process.env.GOOGLE_CLIENT_ID,
-          client_secret: process.env.GOOGLE_CLIENT_SECRET,
-          grant_type: 'refresh_token',
-          refresh_token: token.refreshToken
-        })
-  
-      const response = await fetch(url, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        method: 'POST'
-      })
-  
-      const refreshedTokens = await response.json()
+    console.log("Refreshing access token", token);
+    try {    
 
-  
-      if (!response.ok) {
-        throw refreshedTokens
-      }
+        console.log("Beaarer token", `Bearer ${token.refreshToken}`);
 
-      /*const refreshedTokens = {
+        const response = await fetch('http://localhost:5001/api/auth/refresh', {
+            headers: {
+                "Authorization": `Bearer ${token.refreshToken}`
+            }
+        });
+
+        console.log(response);
+
+        const tokens = await response.json();
+
+        console.log(tokens);
+
+        if (!response.ok) {
+            throw tokens;
+        }
+
+        /*const refreshedTokens = {
         "access_token": "acess-token",
         "expires_in": 2,
         "refresh_token": "refresh-token"
       }*/
-  
-      return {
-        ...token,
-        accessToken: refreshedTokens.access_token,
-        accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
-        refreshToken: refreshedTokens.refresh_token ?? token.refreshToken // Fall back to old refresh token
-      }
+
+        //return token;
+
+        return {
+            ...token,
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken ?? token.refreshToken, // Fall back to old refresh token
+        };
     } catch (error) {
-      console.log(error)
-  
-      return {
-        ...token,
-        error: 'RefreshAccessTokenError'
-      }
+        console.log(error);
+
+        return {
+            ...token,
+            error: "RefreshAccessTokenError",
+        };
     }
-  }
-
-
+}
 
 export const {
     handlers: { GET, POST },
@@ -75,39 +73,49 @@ export const {
             },
             async authorize(credentials) {
                 if (credentials === null) return null;
-                
-                try {
-                    const res = await fetch("http://localhost:5001/users/signIn", {
-                      method: "POST",
-                      body: JSON.stringify({
-                        email: credentials.email,
-                        password: credentials.password,
-                      }),
-                      headers: { "Content-Type": "application/json" },
-                    });
-          
-                    if (!res.ok) {
-                      // credentials are invalid
-                      return null;
-                    }
-          
-                    const parsedResponse = await res.json();
-          
-                    // accessing the jwt returned by server
-                    const jwt = parsedResponse.accessToken;
 
-                    console.log(jwt);
-          
-          // You can make more request to get other information about the user eg. Profile details
-          
-                   // return user credentials together with jwt
+                try {
+                    const res = await fetch(
+                        "http://localhost:5001/api/auth/login",
+                        {
+                            method: "POST",
+                            body: JSON.stringify({
+                                email: credentials.email,
+                                password: credentials.password,
+                            }),
+                            headers: { "Content-Type": "application/json" },
+                        }
+                    );
+
+                    if (!res.ok) {
+                        // credentials are invalid
+                        return null;
+                    }
+
+                    const parsedResponse = await res.json();
+
+                    console.log(parsedResponse);
+
+                    // accessing the accessToken returned by server
+                    const accessToken = parsedResponse.accessToken;
+                    const refreshToken = parsedResponse.refreshToken;
+                    const userInfo = parsedResponse?.userInfo;
+
+                    console.log(refreshToken);
+
+                    // You can make more request to get other information about the user eg. Profile details
+
+                    // return user credentials together with accessToken
                     return {
-                      ...credentials,
-                      jwt,
+                        accessToken,
+                        refreshToken,
+                        role: userInfo?.role,
+                        email: userInfo?.email
                     };
-                  } catch (e) {
+                } catch (e) {
+                    console.error(e);
                     return null;
-                  }
+                }
             },
         }),
         GoogleProvider({
@@ -134,47 +142,57 @@ export const {
         }),
     ],
     callbacks: {
-        async jwt({ token, user, account }) {
-            console.log(`Auth JWT Tok = ${JSON.stringify(token)}`)
-            console.log(`Router Auth JWT account = ${JSON.stringify(account)}`)
-            console.log(`User = ${JSON.stringify(user)}`)
+        jwt: async ({ token, account, user }) => {
+            // user is only available the first time a user signs in authorized
+            console.log(`In jwt callback - Token is ${JSON.stringify(token)}`);
 
-          // Initial sign in
-          if (account && user) {
-            return {
-              accessToken: account.access_token,
-              accessTokenExpires: Date.now() + account.expires_in * 1000,
-              refreshToken: account.refresh_token,
-              user
+            if (token.accessToken) {
+                const decodedToken = jwtDecode(token.accessToken);
+                console.log(decodedToken);
+                token.accessTokenExpires = decodedToken?.exp * 1000;
             }
-          }
-    
-          // Return previous token if the access token has not expired yet
-          console.log("**** Access token expires on *****", token.accessTokenExpires, new Date(token.accessTokenExpires))
-          if (Date.now() < token.accessTokenExpires) {
-            console.log("**** returning previous token ******");
-            return token
-          }
-    
-          // Access token has expired, try to update it
-          console.log("**** Update Refresh token ******");
-          //return refreshAccessToken(token)
-        },
-        async session({ session, token }) {
-            console.log(`Auth Sess = ${JSON.stringify(session)}`)
-            console.log(`At ${new Date()} Auth Tok = ${JSON.stringify(token)}`)
 
-            session.user = token.user
-            session.accessToken = token.accessToken
-            session.error = token.error
-    
-          return session
-        },
-        authorized({ request, auth }) {
-            const { pathname } = request.nextUrl
-            if (pathname === "/middleware-example") return !!auth
-            return true
-        }
-    }
+            if (account && user) {
+                console.log(
+                    `In jwt callback - User is ${JSON.stringify(user)}`
+                );
+                console.log(
+                    `In jwt callback - account is ${JSON.stringify(account)}`
+                );
 
+                return {
+                    ...token,
+                    accessToken: user.accessToken,
+                    refreshToken: user.refreshToken,
+                    user,
+                };
+            }
+
+            // Return previous token if the access token has not expired yet
+            console.log(
+                "**** Access token expires on *****",
+                token.accessTokenExpires,
+                new Date(token.accessTokenExpires)
+            );
+            if (Date.now() < token.accessTokenExpires) {
+                console.log("**** returning previous token ******");
+                return token;
+            }
+
+            // Access token has expired, try to update it
+            console.log("**** Update Refresh token ******");
+            //return token;
+            return refreshAccessToken(token);
+        },
+        session: async ({ session, token }) => {
+            console.log(
+                `In session callback - Token is ${JSON.stringify(token)}`
+            );
+            if (token) {
+                session.accessToken = token.accessToken;
+                session.user = token.user;
+            }
+            return session;
+        },
+    },
 });
