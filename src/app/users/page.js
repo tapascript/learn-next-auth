@@ -2,6 +2,8 @@
 import { fetchClient } from "@/lib/fetch-client";
 import { redirect } from "next/navigation";
 
+import { Stopwatch } from "@/components/Stopwatch";
+
 const UserPage = async () => {
 
   const res = await fetchClient("http://localhost:5001/api/users", {
@@ -21,15 +23,19 @@ const UserPage = async () => {
   
   return (
     <div className="p-3">
-    <h2 className="text-2xl my-2">User Page</h2>
-    <ul>
-      {
-        users.map(user => (
-          <li key={user._id}>{user?.email}</li>
-        ))
+      <h2 className="text-2xl my-2">User Page</h2>
+      <div className="flex justify-around">
+        <ul>
+          <h3 className="text-xl my-2">User List</h3>
+          {
+            users.map(user => (
+              <li key={user._id}>{user?.email}({user?.role})</li>
+            ))
 
-      }
-    </ul>
+          }
+        </ul>
+        <Stopwatch />
+      </div>
     </div>
   )
 }
