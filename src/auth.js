@@ -19,7 +19,7 @@ async function refreshAccessToken(token) {
 
         console.log("Beaarer token", `Bearer ${token.refreshToken}`);
 
-        const response = await fetch('http://localhost:5001/api/auth/refresh', {
+        const response = await fetch(`${process.env.API_SERVER_BASE_URL}/api/auth/refresh`, {
             headers: {
                 "Authorization": `Bearer ${token.refreshToken}`
             }
@@ -76,7 +76,7 @@ export const {
 
                 try {
                     const res = await fetch(
-                        "http://localhost:5001/api/auth/login",
+                        `${process.env.API_SERVER_BASE_URL}/api/auth/login`,
                         {
                             method: "POST",
                             body: JSON.stringify({

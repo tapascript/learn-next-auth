@@ -6,7 +6,7 @@ import { Stopwatch } from "@/components/Stopwatch";
 
 const UserPage = async () => {
 
-  const res = await fetchClient("http://localhost:5001/api/users", {
+  const res = await fetchClient(`${process.env.API_SERVER_BASE_URL}/api/users`, {
     headers: { "Content-Type": "application/json" },
   });
 
