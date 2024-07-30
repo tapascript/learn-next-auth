@@ -3,6 +3,8 @@
 
 This repository contains the source code for the educational video on the [tapaScript YouTube Channel](https://www.youtube.com/tapasadhikary). You will find various Next-Auth implementation details and the source code in this repository.
 
+> **SUBSCRIBE TO [tapaScript](https://www.youtube.com/@tapasadhikary) and support me ❤️ 🙏 ☺️**
+
 ## The Implementations:
 
 - [Integrate Google OAUTH](https://github.com/tapascript/learn-next-auth/tree/01-integrate-google-provider) => [Watch the Video Tutorial](https://www.youtube.com/watch?v=O8Ae6MC5bf4)
@@ -10,6 +12,7 @@ This repository contains the source code for the educational video on the [tapaS
 - [Next-Auth Credential Provider](https://github.com/tapascript/learn-next-auth/tree/03-credential-auth) => [Watch the Video Tutorial](https://www.youtube.com/watch?v=4m7u7zGbdTI)
 - [Next.js Authentication || Register User To MongoDB With Next-Auth V5](https://github.com/tapascript/learn-next-auth/tree/04-persist-auth-mongo) => [Watch the Video Tutorial](https://www.youtube.com/watch?v=5kmZAqc2Jeg)
 - [Next.js Middleware Crash Course || App Router Protected Routes](https://github.com/tapascript/learn-next-auth/tree/05-middleware) => [Watch the Video Tutorial](https://www.youtube.com/watch?v=jHrjnZM26i4)
+- [Refresh Token Rotation With Next-Auth V5 || Managing Tokens](https://github.com/tapascript/learn-next-auth/tree/06-token-management) => [Watch the Video Tutorial](https://youtu.be/95fuP8jpWlk)
 
 ## 🫶 Support
 Liked my work? You can show your support with a STAR(⭐).
